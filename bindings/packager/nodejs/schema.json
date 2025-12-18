@@ -1085,6 +1085,13 @@
           "items": {
             "type": "string"
           }
+        },
+        "install": {
+          "description": "Install script.\n\nSee : <https://wiki.archlinux.org/title/PKGBUILD#install>",
+          "type": [
+            "string",
+            "null"
+          ]
         }
       },
       "additionalProperties": false

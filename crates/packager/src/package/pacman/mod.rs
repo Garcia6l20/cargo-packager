@@ -137,6 +137,26 @@ fn generate_pkgbuild_file(
         "package() {{\n\tcp -r \"${{srcdir}}\"/* \"${{pkgdir}}\"/\n}}"
     )?;
 
+    let install = config
+        .pacman()
+        .and_then(|d| d.install.clone())
+        .unwrap_or_default();
+
+    if !install.is_empty() {
+        let src_script = dunce::canonicalize(&install)
+            .map_err(|e| Error::IoWithPath(PathBuf::from(&install), e))?;
+        let script_path = std::path::PathBuf::from(&install);
+        // NOTE: `dest_dir` from function parameters is actually used as filename rather than dirname.
+        let dest_dir = pkgbuild_path
+            .parent()
+            .ok_or(Error::ParentDirNotFound(pkgbuild_path.to_path_buf()))?;
+        if let Some(parent) = script_path.parent() {
+            fs::create_dir_all(dest_dir.join(parent))?;
+        }
+        fs::copy(src_script, dest_dir.join(script_path))?;
+        writeln!(file, "install={install}")?;
+    }
+
     file.flush()?;
     Ok(())
 }
