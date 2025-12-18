@@ -39,7 +39,11 @@ pub struct DebIcon {
 /// Generate the icon files and store them under the `data_dir`.
 #[tracing::instrument(level = "trace", skip(config))]
 fn generate_icon_files(config: &Config, data_dir: &Path) -> crate::Result<BTreeSet<DebIcon>> {
-    let hicolor_dir = data_dir.join("usr/share/icons/hicolor");
+    let install_prefix: String = config
+        .linux()
+        .map(|linux| linux.install_prefix.clone())
+        .unwrap_or("usr".to_string());
+    let hicolor_dir = data_dir.join(install_prefix).join("share/icons/hicolor");
     let main_binary_name = config.main_binary_name()?;
     let get_dest_path = |width: u32, height: u32, is_high_density: bool| {
         hicolor_dir.join(format!(
@@ -94,8 +98,13 @@ fn generate_icon_files(config: &Config, data_dir: &Path) -> crate::Result<BTreeS
 fn generate_desktop_file(config: &Config, data_dir: &Path) -> crate::Result<()> {
     let bin_name = config.main_binary_name()?;
     let desktop_file_name = format!("{bin_name}.desktop");
+    let install_prefix: String = config
+        .linux()
+        .map(|linux| linux.install_prefix.clone())
+        .unwrap_or("usr".to_string());
     let desktop_file_path = data_dir
-        .join("usr/share/applications")
+        .join(install_prefix)
+        .join("share/applications")
         .join(desktop_file_name);
 
     // For more information about the format of this file, see:
@@ -186,7 +195,13 @@ fn generate_desktop_file(config: &Config, data_dir: &Path) -> crate::Result<()> 
 
 #[tracing::instrument(level = "trace", skip(config))]
 pub fn generate_data(config: &Config, data_dir: &Path) -> crate::Result<BTreeSet<DebIcon>> {
-    let bin_dir = data_dir.join("usr/bin");
+
+    let install_prefix: String = config
+        .linux()
+        .map(|linux| linux.install_prefix.clone())
+        .unwrap_or("usr".to_string());
+
+    let bin_dir = data_dir.join(&install_prefix).join("bin");
 
     tracing::debug!("Copying binaries");
     fs::create_dir_all(&bin_dir).map_err(|e| Error::IoWithPath(bin_dir.clone(), e))?;
@@ -199,7 +214,7 @@ pub fn generate_data(config: &Config, data_dir: &Path) -> crate::Result<BTreeSet
     }
 
     tracing::debug!("Copying resources");
-    let resource_dir = data_dir.join("usr/lib").join(config.main_binary_name()?);
+    let resource_dir = data_dir.join(install_prefix).join("lib").join(config.main_binary_name()?);
     config.copy_resources(&resource_dir)?;
 
     tracing::debug!("Copying external binaries");

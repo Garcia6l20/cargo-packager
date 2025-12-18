@@ -891,6 +891,16 @@ pub struct LinuxConfig {
         alias = "generate_desktop_entry"
     )]
     pub generate_desktop_entry: bool,
+
+    /// Install prefix.
+    /// 
+    /// Defaults to "usr".
+    #[serde(
+        default = "default_linux_install_prefix",
+        alias = "install-prefix",
+        alias = "install_prefix"
+    )]
+    pub install_prefix: String,
 }
 
 /// A wix language.
@@ -2241,6 +2251,10 @@ fn sanitize_path<P: AsRef<Path>>(path: P) -> PathBuf {
         }
     }
     dest
+}
+
+fn default_linux_install_prefix() -> String {
+    "usr".into()
 }
 
 fn default_true() -> bool {
