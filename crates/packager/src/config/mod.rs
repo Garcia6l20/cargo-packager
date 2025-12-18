@@ -491,6 +491,10 @@ pub struct PacmanConfig {
     /// Source of the package to be stored at PKGBUILD.
     /// PKGBUILD is a bash script, so version can be referred as ${pkgver}
     pub source: Option<Vec<String>>,
+    /// Install script.
+    /// 
+    /// See : <https://wiki.archlinux.org/title/PKGBUILD#install>
+    pub install: Option<String>,
 }
 
 impl PacmanConfig {
