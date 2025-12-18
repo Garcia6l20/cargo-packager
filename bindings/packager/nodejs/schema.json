@@ -888,6 +888,11 @@
           "description": "Flag to indicate if desktop entry should be generated.",
           "default": true,
           "type": "boolean"
+        },
+        "installPrefix": {
+          "description": "Install prefix.\n\nDefaults to \"usr\".",
+          "default": "usr",
+          "type": "string"
         }
       },
       "additionalProperties": false
