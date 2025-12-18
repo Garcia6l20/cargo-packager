@@ -234,6 +234,26 @@ pub struct DebianConfig {
     /// Defaults to [`Config::product_name`] converted to kebab-case.
     #[serde(alias = "package-name", alias = "package_name")]
     pub package_name: Option<String>,
+
+    /// Pre-install script.
+    ///  
+    /// See: <https://manpages.debian.org/testing/dpkg-dev/deb-preinst.5.fr.html>
+    pub preinst: Option<String>,
+
+    /// Post-install script.
+    ///  
+    /// See: <https://manpages.debian.org/testing/dpkg-dev/deb-postinst.5.fr.html>
+    pub postinst: Option<String>,
+
+    /// Pre-remove script.
+    ///  
+    /// See: <https://manpages.debian.org/testing/dpkg-dev/deb-prerm.5.fr.html>
+    pub prerm: Option<String>,
+
+    /// Post-remove script.
+    ///  
+    /// See: <https://manpages.debian.org/testing/dpkg-dev/deb-postrm.5.fr.html>
+    pub postrm: Option<String>,
 }
 
 impl DebianConfig {
@@ -492,7 +512,7 @@ pub struct PacmanConfig {
     /// PKGBUILD is a bash script, so version can be referred as ${pkgver}
     pub source: Option<Vec<String>>,
     /// Install script.
-    /// 
+    ///
     /// See : <https://wiki.archlinux.org/title/PKGBUILD#install>
     pub install: Option<String>,
 }
