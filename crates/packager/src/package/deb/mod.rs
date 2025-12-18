@@ -480,6 +480,37 @@ pub(crate) fn package(ctx: &Context) -> crate::Result<Vec<PathBuf>> {
     tracing::debug!("Generating control file");
     generate_control_file(config, arch, &control_dir, &data_dir)?;
 
+    if let Some(&deb) = config.deb().as_ref() {
+        if let Some(preinst) = &deb.preinst {
+            fs::copy(
+                dunce::canonicalize(preinst)
+                    .map_err(|e| Error::IoWithPath(PathBuf::from(preinst), e))?,
+                control_dir.join("preinst"),
+            )?;
+        }
+        if let Some(postinst) = &deb.postinst {
+            fs::copy(
+                dunce::canonicalize(postinst)
+                    .map_err(|e| Error::IoWithPath(PathBuf::from(postinst), e))?,
+                control_dir.join("postinst"),
+            )?;
+        }
+        if let Some(prerm) = &deb.prerm {
+            fs::copy(
+                dunce::canonicalize(prerm)
+                    .map_err(|e| Error::IoWithPath(PathBuf::from(prerm), e))?,
+                control_dir.join("prerm"),
+            )?;
+        }
+        if let Some(postrm) = &deb.postrm {
+            fs::copy(
+                dunce::canonicalize(postrm)
+                    .map_err(|e| Error::IoWithPath(PathBuf::from(postrm), e))?,
+                control_dir.join("postrm"),
+            )?;
+        }
+    }
+
     tracing::debug!("Generating md5sums");
     generate_md5sums(&control_dir, &data_dir)?;
 

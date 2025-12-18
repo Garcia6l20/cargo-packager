@@ -944,6 +944,34 @@
             "string",
             "null"
           ]
+        },
+        "preinst": {
+          "description": "Pre-install script.\n\nSee: <https://manpages.debian.org/testing/dpkg-dev/deb-preinst.5.fr.html>",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "postinst": {
+          "description": "Post-install script.\n\nSee: <https://manpages.debian.org/testing/dpkg-dev/deb-postinst.5.fr.html>",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "prerm": {
+          "description": "Pre-remove script.\n\nSee: <https://manpages.debian.org/testing/dpkg-dev/deb-prerm.5.fr.html>",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "postrm": {
+          "description": "Post-remove script.\n\nSee: <https://manpages.debian.org/testing/dpkg-dev/deb-postrm.5.fr.html>",
+          "type": [
+            "string",
+            "null"
+          ]
         }
       },
       "additionalProperties": false
